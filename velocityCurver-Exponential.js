@@ -23,34 +23,42 @@
  * 200 = louder
  */
 var amplifier = 75;
+
+// Compresses dynamic range after velocity has been curved:
 // Dynamic range (out of 127 velocities)
 var range = 126;
-// How much to boost after "compression"
+// How much to boost after compressing the dynamic range.
+// Recommend a minimum of 1, since a NoteOn with velocity = 0 is equivalent to a NoteOff (as per the MIDI spec).
 var makeup = 1;
 
-var doTrace = true;
+// Debug
+var doTrace = false;
 
 // ==== /CONGIFURATION ====
 
 
 var exponent = 100 / amplifier - 1;
 
+function debug(message) {
+	if (doTrace) {
+		Trace(message);
+	}
+}
+
 function HandleMIDI(event)
 {
 	if (event instanceof NoteOn)
 	{
-		if (doTrace) {
-			Trace("In velocity: " + event.velocity)
-		}
+		debug("In velocity: " + event.velocity);
 		event.velocity = event.velocity * Math.pow(event.velocity / 127, exponent);
-		if (doTrace) {
-			Trace("Curved: " + event.velocity);
-		}
+		debug("Curved: " + event.velocity);
+
 		event.velocity = event.velocity * range / 127 + makeup;
+		debug("Adjusted to range: " + event.velocity);
+
 		if (doTrace) {
-			Trace("Adjusted to range: " + event.velocity);
+			event.trace();
 		}
-		event.trace();
 	}
 	event.send();
 }
