@@ -8,7 +8,7 @@
  * c is an exponent derived by a configured 'amplifier' parameter.
  * 
  * This exponential curve guarantees that we can deliver the extreme velocities,
- * I.e. velocity 127 still outputs velocity 127, and velocity 0 still outputs velocity 0.
+ * I.e. velocity 1 still outputs velocity 1127, and velocity 127 still outputs velocity 127.
  *
  * The dynamic range can then be compressed to a velocity range and makeup.
  * E.g. range = 60; makeup = 20 results in velocities ranging from from 20 to 80.
